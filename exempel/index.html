@@ -1,0 +1,80 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Kvitter.se</title>
+<link rel='stylesheet' type='text/css'
+	href='http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.9/themes/cupertino/jquery-ui.css' />
+<style>
+#homeScreen {
+	display: none;
+}
+</style>
+</head>
+<body>
+
+<div id='loginForm'>
+	<form>
+	<fieldset>
+	<legend>Logga in</legend>
+	<input id='username' name='username' value='användarnamn' />
+	<input id='password' name='password' type='password' />
+	<div id='loginButton'>Logga in</div>
+	</fieldset>
+	</form>
+</div>
+
+<div id='homeScreen'>
+
+<h1 id='homeHeader'>Välkommen!</h1>
+
+</div>
+
+
+<script src='https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js'></script>
+<script src='https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.9/jquery-ui.min.js'></script>
+<script>
+
+function loadTweets() {
+	
+}
+
+function successfulLogin(data) {
+	$('#loginForm').hide();
+	$('#homeScreen').show();
+	$('#homeHeader').html('Hej ' + data.username + "!");
+	// hämta tweets
+	loadTweets();
+	
+	// hämta followers
+	loadFollowers();
+};
+
+$('#loginButton').button();
+$('#loginButton').click(function() {
+
+	var username = $('#username').val();
+	var password = $('#password').val();
+
+	var url = '../login.php';
+	var parameters = {
+			"username": username,
+			"password": password
+	}
+
+	var callback = function(data, textStatus, jqXHR) {
+		if (data.status == false) {
+			alert("Fel användarnamn och/eller lösenord - försök igen!");
+		} else {
+			successfulLogin(data);
+		}
+	};
+	
+	$.get(url, parameters, callback, 'json');
+
+});
+
+</script>
+
+</body>
+</html>
